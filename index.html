@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Entry Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Student Marks</h1>
+    <form method="GET" action="/">
+        <input type="text" name="search" placeholder="Search by name or roll number" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+    <a href="/add">Add Student</a>
+    <a href="/download" class="download-button">Download Student Data</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Roll Number</th>
+                <th>Python</th>
+                <th>Java</th>
+                <th>Total Marks</th>
+                <th>Percentage</th>
+                <th>Status</th> <!-- New Column for Status -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student[0] }}</td>
+                <td>{{ student[1] }}</td>
+                <td>{{ student[2] }}</td>
+                <td>{{ student[3] }}</td>
+                <td>{{ student[4] }}</td>
+                <td>{{ student[5] }}</td>
+                <td>{{ student[6] }}%</td>
+                <td>
+                    {% if student[6] >= 33 and student[3] >= 33 and student[4] >= 33 %}
+                        Passed
+                    {% else %}
+                        Failed
+                    {% endif %}
+                </td> <!-- Display Pass/Fail Status -->
+                <td>
+                    <a href="{{ url_for('update_student', student_id=student[0]) }}">Update</a>
+                    <form method="POST" action="{{ url_for('delete_student', student_id=student[0]) }}" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
